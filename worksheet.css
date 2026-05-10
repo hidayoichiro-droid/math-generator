@@ -141,22 +141,24 @@ body { font-family: var(--font-main); background: var(--page-bg); color: var(--t
 
 
 
+
 /* ─── 虫食い ─── */
 .mushikui-badge {
   font-size: 9.5pt; color: white; padding: 2px 9px;
   border-radius: 20px; font-weight: 700; margin-left: 6px; vertical-align: middle;
 }
 
-/* シンプルな空白ボックス（二重四角なし） */
+/* シンプルな正方形ボックス */
 .mushikui-box {
   display: inline-block;
-  width: 0.72em;
-  height: 0.88em;
-  border: 2.5px solid #7c3aed;
+  width: 0.85em;          /* 1桁の文字幅に合わせる */
+  height: 0.95em;         /* ほぼ正方形 */
+  border: 2px solid #7c3aed;
   background: #f3effe;
   border-radius: 3px;
-  vertical-align: -0.08em;
-  line-height: 1;
+  vertical-align: -0.12em;
+  flex-shrink: 0;         /* flexコンテナ内でつぶれないように */
+  box-sizing: border-box;
 }
 
 /* 答え表示（通常問題） */
@@ -168,10 +170,7 @@ body { font-family: var(--font-main); background: var(--page-bg); color: var(--t
   padding-top: 2px; letter-spacing: 0.04em;
 }
 
-/* スマホ表示：a4-wrapperのoverflowを制御 */
+/* スマホ表示 */
 @media screen and (max-width: 820px) {
-  .a4-wrapper {
-    overflow: visible;
-    padding: 10px 4px 40px;
-  }
+  .a4-wrapper { overflow: visible; padding: 10px 4px 40px; }
 }
