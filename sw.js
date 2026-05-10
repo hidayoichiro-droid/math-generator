@@ -1,5 +1,5 @@
 // sw.js — Service Worker v3 (ネットワーク優先)
-const CACHE = 'math-gen-v3';
+const CACHE = 'math-gen-v4';
 const ASSETS = [
   './', './index.html', './worksheet.html',
   './app.css', './app.js', './generator.js', './storage.js',

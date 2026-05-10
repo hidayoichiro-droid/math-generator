@@ -37,7 +37,23 @@ function render(data) {
   document.getElementById('a4-page').innerHTML = html;
   document.getElementById('print-page').innerHTML = `<div class="a4-page">${html}</div>`;
   document.title = buildTitle(data.settings);
+  fitA4();
 }
+
+// スマホ画面幅にA4プレビューをフィット（印刷には影響しない）
+function fitA4() {
+  const page = document.getElementById('a4-page');
+  if (!page) return;
+  // 一旦リセットして自然幅を取得
+  page.style.zoom = '';
+  const naturalW = page.offsetWidth || 794;
+  const vw = window.innerWidth || document.documentElement.clientWidth;
+  if (vw < naturalW + 16) {
+    page.style.zoom = ((vw - 8) / naturalW).toFixed(4);
+  }
+}
+window.addEventListener('resize', fitA4);
+window.addEventListener('orientationchange', () => setTimeout(fitA4, 350));
 
 function buildTitle(s) {
   const m=s.headerMonth||'__', d=s.headerDay||'__';
@@ -77,13 +93,13 @@ function getGridConfig(count, maxDigit, isWritten) {
 }
 
 /**
- * 数値をHTML文字列に変換。hiddenPos の桁を □ に置き換える
+ * 数値をHTML文字列に変換。hiddenPos の桁を空ボックスに置き換える
  */
 function numHTML(num, hiddenPos) {
   const str = String(num);
   if (!hiddenPos || hiddenPos.length === 0) return str;
   return str.split('').map((ch, i) =>
-    hiddenPos.includes(i) ? '<span class="mushikui-box">□</span>' : ch
+    hiddenPos.includes(i) ? '<span class="mushikui-box"></span>' : ch
   ).join('');
 }
 

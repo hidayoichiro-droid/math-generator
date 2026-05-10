@@ -140,27 +140,38 @@ body { font-family: var(--font-main); background: var(--page-bg); color: var(--t
 }
 
 
+
 /* ─── 虫食い ─── */
 .mushikui-badge {
   font-size: 9.5pt; color: white; padding: 2px 9px;
   border-radius: 20px; font-weight: 700; margin-left: 6px; vertical-align: middle;
 }
-/* □ボックス（通常問題） */
+
+/* シンプルな空白ボックス（二重四角なし） */
 .mushikui-box {
-  display: inline-flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 0.95em;
-  color: #7c3aed; border: 2.5px solid #7c3aed;
-  border-radius: 4px; min-width: 0.9em;
-  padding: 0 2px; vertical-align: baseline; line-height: 1.1;
+  display: inline-block;
+  width: 0.72em;
+  height: 0.88em;
+  border: 2.5px solid #7c3aed;
+  background: #f3effe;
+  border-radius: 3px;
+  vertical-align: -0.08em;
+  line-height: 1;
 }
+
 /* 答え表示（通常問題） */
 .answer-shown { font-weight: 800; color: #1a1a1a; }
-/* 筆算の□ */
-.mushikui-written-blank {
-  font-weight: 800; color: #7c3aed; letter-spacing: 0.1em;
-}
+
 /* 筆算の答え表示 */
 .written-answer-shown {
   font-weight: 800; color: #1a1a1a; text-align: right;
   padding-top: 2px; letter-spacing: 0.04em;
+}
+
+/* スマホ表示：a4-wrapperのoverflowを制御 */
+@media screen and (max-width: 820px) {
+  .a4-wrapper {
+    overflow: visible;
+    padding: 10px 4px 40px;
+  }
 }
