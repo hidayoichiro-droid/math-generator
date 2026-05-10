@@ -1,0 +1,187 @@
+/* app.css — モバイルファースト */
+:root {
+  --bg: #fdf8f0;
+  --surface: #ffffff;
+  --border: #e8dfd0;
+  --text: #2d2013;
+  --muted: #8a7560;
+  --accent: #ff6b35;
+  --op-add: #ff6b35; --op-sub: #3b82f6;
+  --op-mul: #16a34a; --op-div: #9333ea; --op-wri: #d97706;
+  --r: 14px; --rs: 9px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  background: var(--bg); color: var(--text);
+  font-size: 15px; line-height: 1.5;
+  padding-bottom: 90px;
+}
+
+/* ── Header ── */
+.app-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+  background: var(--accent); color: white;
+  position: sticky; top: 0; z-index: 50;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.app-logo { font-size: 30px; }
+.app-title { font-size: 17px; font-weight: 800; }
+.app-sub   { font-size: 12px; opacity: 0.85; }
+
+/* ── Main ── */
+.main-content { padding: 12px; display: flex; flex-direction: column; gap: 12px; max-width: 600px; margin: 0 auto; }
+
+/* ── Card ── */
+.card { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--r); padding: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+.card-title { font-size: 14px; font-weight: 800; margin-bottom: 10px; }
+.card-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.card-header-row .card-title { margin-bottom: 0; }
+
+/* ── Forms ── */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.form-group { display: flex; flex-direction: column; gap: 4px; }
+.form-group.span2 { grid-column: span 2; }
+label { font-size: 11px; font-weight: 700; color: var(--muted); }
+.input {
+  background: var(--bg); border: 1.5px solid var(--border);
+  border-radius: var(--rs); padding: 9px 10px;
+  font-family: inherit; font-size: 15px; color: var(--text);
+  outline: none; width: 100%;
+  -webkit-appearance: none; appearance: none;
+}
+.input:focus { border-color: var(--accent); }
+
+/* ── 大問カード ── */
+.daion-card {
+  border: 2px solid var(--border); border-radius: var(--rs);
+  padding: 11px; margin-bottom: 9px;
+}
+.daion-card:last-child { margin-bottom: 0; }
+.daion-card.op-addition       { border-color: var(--op-add); background: #fff7f5; }
+.daion-card.op-subtraction    { border-color: var(--op-sub); background: #f0f6ff; }
+.daion-card.op-multiplication { border-color: var(--op-mul); background: #f0fff5; }
+.daion-card.op-division       { border-color: var(--op-div); background: #f8f0ff; }
+.daion-card.op-written        { border-color: var(--op-wri); background: #fffbf0; }
+.daion-header { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+.daion-num {
+  width: 26px; height: 26px; border-radius: 50%; background: var(--accent);
+  color: white; font-weight: 800; font-size: 13px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.daion-lbl { font-weight: 800; font-size: 14px; flex: 1; }
+.btn-remove {
+  background: none; border: none; color: #ccc; cursor: pointer;
+  font-size: 18px; padding: 2px 6px; border-radius: 6px;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.15s;
+}
+.btn-remove:active { color: #ef4444; }
+.daion-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: end; margin-bottom: 8px; }
+.daion-count-group { width: 70px; }
+
+/* ── チェックピル ── */
+.check-row { border-top: 1px dashed var(--border); padding-top: 8px; margin-top: 4px; }
+.check-row + .check-row { margin-top: 6px; }
+.check-row-label { font-size: 11px; font-weight: 700; color: var(--muted); display: block; margin-bottom: 6px; }
+.check-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.check-pill {
+  display: inline-flex; align-items: center;
+  padding: 5px 13px; border: 1.5px solid var(--border);
+  border-radius: 20px; font-size: 13px; font-weight: 700;
+  cursor: pointer; user-select: none; background: white;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.15s;
+}
+.check-pill input { display: none; }
+.check-pill:has(input:checked) { background: var(--accent); border-color: var(--accent); color: white; }
+
+/* ── 追加ボタン ── */
+.btn-add {
+  background: var(--accent); color: white; border: none;
+  border-radius: var(--rs); padding: 7px 13px;
+  font-family: inherit; font-size: 13px; font-weight: 700;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.btn-add:disabled { opacity: 0.4; }
+
+/* ── プリセット ── */
+.preset-row {
+  display: flex; align-items: center; gap: 6px;
+  padding: 9px 10px; margin-bottom: 7px;
+  border: 1.5px solid var(--border); border-radius: var(--rs);
+  background: var(--bg);
+}
+.preset-row:last-child { margin-bottom: 0; }
+.preset-row.has-data { border-color: var(--op-wri); background: #fffbf0; }
+.preset-idx { font-size: 11px; font-weight: 800; color: var(--muted); width: 18px; flex-shrink: 0; text-align: center; }
+.preset-name {
+  flex: 1; border: none; background: transparent;
+  font-family: inherit; font-size: 14px; color: var(--text);
+  outline: none; min-width: 0;
+}
+.preset-name::placeholder { color: #ccc; }
+.preset-btn {
+  border: 1.5px solid var(--border); border-radius: 7px;
+  padding: 5px 9px; font-family: inherit; font-size: 12px; font-weight: 700;
+  cursor: pointer; background: none; color: var(--muted); white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+.preset-btn:disabled { opacity: 0.3; }
+.preset-btn.save-btn:active { border-color: #3b82f6; color: #3b82f6; }
+.preset-btn.load-btn:active { border-color: #16a34a; color: #16a34a; }
+.preset-btn.del-btn:active  { border-color: #ef4444; color: #ef4444; }
+
+/* ── フッター ── */
+.action-footer {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  display: flex; gap: 8px; padding: 10px 14px;
+  background: var(--surface); border-top: 1.5px solid var(--border);
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+  padding-bottom: calc(10px + env(safe-area-inset-bottom));
+}
+.btn-action {
+  flex: 1; padding: 13px 6px;
+  border: none; border-radius: var(--rs);
+  font-family: inherit; font-size: 15px; font-weight: 800;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.1s;
+}
+.btn-action:active { opacity: 0.8; }
+.btn-action:disabled { opacity: 0.35; }
+.btn-create { background: var(--accent); color: white; }
+.btn-print  { background: #3b82f6; color: white; }
+.btn-save   { background: #16a34a; color: white; }
+
+/* ── Toast ── */
+.toast {
+  position: fixed; bottom: 90px; left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  background: #2d2013; color: white;
+  padding: 8px 18px; border-radius: 20px;
+  font-size: 13px; font-weight: 700;
+  opacity: 0; transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none; white-space: nowrap; z-index: 200;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── iPad/Desktop ── */
+@media (min-width: 640px) {
+  .main-content { padding: 16px; }
+  .form-grid { grid-template-columns: 80px 80px 100px 1fr; }
+  .form-group.span2 { grid-column: auto; }
+  .btn-action { font-size: 16px; }
+}
+
+
+
+/* ─── 虫食い難易度ピル（:has()不使用・全ブラウザ対応） ─── */
+.mushikui-level-pill input { display: none; }
+
+/* active クラスを JS で付与してスタイルを変える */
+.mushikui-level-pill.active-off    { background:#6b7280; border-color:#6b7280; color:white; }
+.mushikui-level-pill.active-easy   { background:#16a34a; border-color:#16a34a; color:white; }
+.mushikui-level-pill.active-normal { background:#d97706; border-color:#d97706; color:white; }
+.mushikui-level-pill.active-hard   { background:#dc2626; border-color:#dc2626; color:white; }

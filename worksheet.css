@@ -1,0 +1,166 @@
+/* worksheet.css — A4対応 (フォント1.5倍・間隔1.3倍) */
+:root {
+  --font-main: 'Noto Sans JP', sans-serif;
+  --page-bg: #f0f0f0;
+  --paper-bg: #ffffff;
+  --text: #1a1a1a;
+  --border: #222;
+  --border-light: #bbb;
+  --clr-addition:       #ff6b35;
+  --clr-subtraction:    #3b82f6;
+  --clr-multiplication: #16a34a;
+  --clr-division:       #9333ea;
+  --clr-written:        #d97706;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-main); background: var(--page-bg); color: var(--text); min-height: 100vh; }
+
+/* ─── Toolbar ─── */
+.toolbar {
+  position: fixed; top: 0; left: 0; right: 0; height: 50px;
+  background: #2d2013; color: white;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 18px; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.toolbar-left { display: flex; align-items: center; gap: 8px; }
+.toolbar-logo { font-size: 20px; }
+.toolbar-title { font-size: 14px; font-weight: 700; }
+.toolbar-right { display: flex; gap: 8px; }
+.tb-btn { padding: 6px 13px; border: none; border-radius: 7px; font-family: var(--font-main); font-size: 13px; font-weight: 700; cursor: pointer; }
+.tb-btn:hover { opacity: 0.85; }
+.btn-regen { background: #555; color: white; }
+.btn-print { background: #3b82f6; color: white; }
+.btn-save  { background: #16a34a; color: white; }
+
+/* ─── A4 Wrapper ─── */
+.a4-wrapper { margin-top: 58px; display: flex; justify-content: center; padding: 24px 16px 50px; }
+.a4-page {
+  width: 210mm; min-height: 297mm; background: var(--paper-bg);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18); border-radius: 2px;
+  padding: 13mm 13mm; position: relative;
+}
+
+/* ─── ヘッダー ─── */
+.ws-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  border-bottom: 2.5px solid var(--border);
+  padding-bottom: 7px;
+  margin-bottom: 50px;
+}
+.ws-date { font-size: 15pt; font-weight: 700; letter-spacing: 0.5em; min-width: 220px; }
+.ws-name-area { display: flex; align-items: center; gap: 5px; }
+.ws-name-label { font-size: 12pt; white-space: nowrap; }
+.ws-name-box { width: 240px; border-bottom: 2px solid var(--border); height: 24px; display: inline-block; }
+.ws-score-area { display: flex; align-items: center; gap: 4px; font-size: 12pt; }
+.ws-score-box { width: 60px; border-bottom: 2px solid var(--border); height: 24px; display: inline-block; }
+.ws-score-unit { font-size: 10pt; }
+
+/* ─── 大問セクション ─── */
+.daion-section { margin-bottom: 6.5mm; }  /* 5mm × 1.3 */
+.daion-heading {
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 4px;    /* ×1.3 */
+}
+.daion-num-circle {
+  width: 24px; height: 24px; border-radius: 50%; color: white;
+  font-size: 13pt; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.daion-title-text { font-size: 16pt; font-weight: 800; }   /* 13pt × 1.5 ≈ 20pt → 16pt (A4収まり重視) */
+.daion-section.op-addition       .daion-num-circle { background: var(--clr-addition); }
+.daion-section.op-subtraction    .daion-num-circle { background: var(--clr-subtraction); }
+.daion-section.op-multiplication .daion-num-circle { background: var(--clr-multiplication); }
+.daion-section.op-division       .daion-num-circle { background: var(--clr-division); }
+.daion-section.op-written        .daion-num-circle { background: var(--clr-written); }
+
+/* ─── 通常問題グリッド ─── */
+.problems-grid {
+  display: grid;
+  gap: 5px 5px;          /* row: 3px × 1.5 */
+  border: 1.5px solid var(--border-light);
+  border-radius: 5px;
+  padding: 5px 9px;      /* 4px 7px × 1.3 */
+  background: #fafafa;
+}
+.problem-cell {
+  display: flex; align-items: baseline; gap: 2px;
+  font-weight: 700;
+  padding: 6px 1px;      /* 4px × 1.5 */
+  white-space: nowrap; overflow: hidden;
+}
+.problem-num { font-size: 9pt; color: #aaa; font-weight: 400; min-width: 20px; flex-shrink: 0; }
+.problem-expr { display: flex; align-items: baseline; gap: 2px; flex: 1; overflow: hidden; }
+.answer-blank { display: inline-block; flex-shrink: 0; }
+
+/* ─── 筆算グリッド ─── */
+.written-grid {
+  display: grid;
+  gap: 12px 10px;        /* row: 7px × 1.75 */
+  padding: 7px 9px;      /* 5px 7px × 1.3 */
+  border: 1.5px solid var(--border-light);
+  border-radius: 5px;
+  background: #fafafa;
+}
+.written-cell {
+  display: flex; flex-direction: column; align-items: flex-end;
+  padding: 4px 7px 8px;  /* 3px 5px 6px × 1.3 */
+  min-height: 88px;      /* 68px × 1.3 */
+  position: relative;
+}
+.written-problem-num { position: absolute; top: 2px; left: 3px; font-size: 8pt; color: #aaa; }
+.written-a { font-weight: 700; letter-spacing: 0.04em; line-height: 1.4; }
+/* 演算子行 + 横線1本のみ */
+.written-op-row {
+  display: flex; align-items: center; width: 100%;
+  justify-content: space-between; font-weight: 700;
+  border-bottom: 2.5px solid var(--border);
+  padding-bottom: 3px; margin-bottom: 7px;  /* ×1.3 */
+  line-height: 1.4;
+}
+.written-symbol { padding-right: 2px; }
+.written-b { letter-spacing: 0.04em; }
+/* 答えスペース：罫線なし（上の1本のみ） */
+.written-answer-space {
+  width: 100%;
+  min-height: 26px;      /* 20px × 1.3 */
+}
+
+/* ─── 印刷 ─── */
+.print-page { display: none; }
+@media print {
+  @page { size: A4 portrait; margin: 13mm; }
+  body { background: white !important; }
+  .no-print   { display: none !important; }
+  .a4-wrapper { display: none !important; }
+  .print-page { display: block !important; width: 100%; }
+  .print-page .a4-page { width: 100%; min-height: auto; padding: 0; box-shadow: none; background: white; }
+  .daion-section { page-break-inside: avoid; }
+  .problems-grid { break-inside: avoid; }
+  .written-grid  { break-inside: avoid; }
+}
+
+
+/* ─── 虫食い ─── */
+.mushikui-badge {
+  font-size: 9.5pt; color: white; padding: 2px 9px;
+  border-radius: 20px; font-weight: 700; margin-left: 6px; vertical-align: middle;
+}
+/* □ボックス（通常問題） */
+.mushikui-box {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.95em;
+  color: #7c3aed; border: 2.5px solid #7c3aed;
+  border-radius: 4px; min-width: 0.9em;
+  padding: 0 2px; vertical-align: baseline; line-height: 1.1;
+}
+/* 答え表示（通常問題） */
+.answer-shown { font-weight: 800; color: #1a1a1a; }
+/* 筆算の□ */
+.mushikui-written-blank {
+  font-weight: 800; color: #7c3aed; letter-spacing: 0.1em;
+}
+/* 筆算の答え表示 */
+.written-answer-shown {
+  font-weight: 800; color: #1a1a1a; text-align: right;
+  padding-top: 2px; letter-spacing: 0.04em;
+}

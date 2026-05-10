@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="算数ジェネレーター">
+  <meta name="theme-color" content="#ff6b35">
+  <title>算数問題ジェネレーター</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="app-header">
+    <span class="app-logo">🧮</span>
+    <div>
+      <h1 class="app-title">算数問題ジェネレーター</h1>
+      <p class="app-sub">設定して問題を作ろう！</p>
+    </div>
+  </header>
+
+  <main class="main-content">
+
+    <!-- ── ヘッダー設定 ── -->
+    <section class="card">
+      <h2 class="card-title">📅 問題用紙のヘッダー</h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>月</label>
+          <input type="number" id="header-month" class="input" min="1" max="12" placeholder="月">
+        </div>
+        <div class="form-group">
+          <label>日</label>
+          <input type="number" id="header-day" class="input" min="1" max="31" placeholder="日">
+        </div>
+        <div class="form-group">
+          <label>曜日</label>
+          <select id="header-weekday" class="input">
+            <option value="">──</option>
+            <option>月</option><option>火</option><option>水</option>
+            <option>木</option><option>金</option><option>土</option><option>日</option>
+          </select>
+        </div>
+        <div class="form-group span2">
+          <label>名前欄ラベル</label>
+          <input type="text" id="header-namelabel" class="input" value="なまえ">
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 大問設定 ── -->
+    <section class="card">
+      <div class="card-header-row">
+        <h2 class="card-title">✏️ 大問の設定</h2>
+        <button class="btn-add" id="btn-add-daion">＋ 追加</button>
+      </div>
+      <div id="daion-list"></div>
+    </section>
+
+    <!-- ── プリセット ── -->
+    <section class="card">
+      <h2 class="card-title">💾 プリセット</h2>
+      <div id="preset-list"></div>
+    </section>
+
+  </main>
+
+  <!-- ── アクションボタン ── -->
+  <footer class="action-footer">
+    <button class="btn-action btn-create" id="btn-create">⚡ 作成</button>
+    <button class="btn-action btn-print"  id="btn-print"  disabled>🖨️ 印刷</button>
+    <button class="btn-action btn-save"   id="btn-save"   disabled>💾 保存</button>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="generator.js"></script>
+  <script src="storage.js"></script>
+  <script src="app.js"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(r => console.log('SW registered:', r.scope))
+          .catch(e => console.log('SW error:', e));
+      });
+    }
+  </script>
+</body>
+</html>

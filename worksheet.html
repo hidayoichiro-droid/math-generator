@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>算数問題用紙</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="worksheet.css">
+</head>
+<body>
+  <div class="toolbar no-print">
+    <div class="toolbar-left">
+      <button class="tb-btn btn-regen" id="btn-back">← 戻る</button>
+      <span class="toolbar-title">問題用紙プレビュー</span>
+    </div>
+    <div class="toolbar-right">
+      <button class="tb-btn btn-regen" id="btn-regen">🔄 再作成</button>
+      <button class="tb-btn btn-print" id="btn-print">🖨️ 印刷</button>
+      <button class="tb-btn btn-save"  id="btn-save">💾 保存</button>
+    </div>
+  </div>
+  <div class="a4-wrapper no-print">
+    <div class="a4-page" id="a4-page"></div>
+  </div>
+  <div class="print-page" id="print-page"></div>
+  <script src="generator.js"></script>
+  <script src="worksheet.js"></script>
+</body>
+</html>
