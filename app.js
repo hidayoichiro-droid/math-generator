@@ -321,8 +321,16 @@ function handleCreate() {
   saveLastSettings(settings);
   document.getElementById('btn-print').disabled = false;
   document.getElementById('btn-save').disabled  = false;
+
+  const wantsAnswers = document.getElementById('create-answer-sheet').checked;
   window.open('worksheet.html', '_blank');
-  showToast('問題を作成しました！');
+  if (wantsAnswers) {
+    // 答え版を少し遅らせて開く（ポップアップブロック対策）
+    setTimeout(() => window.open('worksheet.html?answers=1', '_blank'), 250);
+    showToast('問題版と答え版を作成しました！');
+  } else {
+    showToast('問題を作成しました！');
+  }
 }
 function handlePrint() {
   if (!localStorage.getItem('math_gen_worksheet')) { showToast('先に「作成」を押してください'); return; }

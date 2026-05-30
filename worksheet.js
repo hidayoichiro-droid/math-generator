@@ -11,6 +11,7 @@ const MUSHIKUI_BADGES = {
 };
 
 let worksheetData = null;
+const ANSWER_MODE = new URLSearchParams(location.search).get('answers') === '1';
 
 document.addEventListener('DOMContentLoaded', () => {
   try {
@@ -18,6 +19,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (raw) { worksheetData = JSON.parse(raw); render(worksheetData); }
     else showError('問題データがありません。設定画面から「作成」を押してください。');
   } catch (e) { showError('データ読み込み失敗'); }
+
+  // モードに応じてツールバー表示を更新
+  document.body.classList.toggle('answer-mode', ANSWER_MODE);
+  document.getElementById('toolbar-title').textContent = ANSWER_MODE ? '答え版プレビュー' : '問題用紙プレビュー';
+  const btnMode = document.getElementById('btn-toggle-mode');
+  btnMode.textContent = ANSWER_MODE ? '❓ 問題版' : '📝 答え版';
+  btnMode.addEventListener('click', () => {
+    location.href = ANSWER_MODE ? 'worksheet.html' : 'worksheet.html?answers=1';
+  });
 
   document.getElementById('btn-print').addEventListener('click', () => window.print());
   document.getElementById('btn-save').addEventListener('click', saveAsHTML);
@@ -54,7 +64,8 @@ window.addEventListener('orientationchange', () => setTimeout(fitA4, 350));
 
 function buildTitle(s) {
   const m=s.headerMonth||'__', d=s.headerDay||'__';
-  return `算数問題用紙 ${m}月${d}日${s.headerWeekday?`(${s.headerWeekday})`:''}`;
+  const suffix = ANSWER_MODE ? '【答え】' : '';
+  return `算数問題用紙${suffix} ${m}月${d}日${s.headerWeekday?`(${s.headerWeekday})`:''}`;
 }
 
 function buildPageHTML(data) {
@@ -117,6 +128,12 @@ function getGridConfig(count, maxDigit, isWritten) {
 function numHTML(num, hiddenPos) {
   const str = String(num);
   if (!hiddenPos || hiddenPos.length === 0) return str;
+  if (ANSWER_MODE) {
+    // 答え版: 隠した桁は赤字で表示
+    return str.split('').map((ch, i) =>
+      hiddenPos.includes(i) ? `<span class="answer-filled">${ch}</span>` : ch
+    ).join('');
+  }
   return str.split('').map((ch, i) =>
     hiddenPos.includes(i) ? '<span class="mushikui-box"></span>' : ch
   ).join('');
@@ -152,9 +169,13 @@ function buildNormalGrid(problems, cfg) {
         <span class="problem-expr">${aH}&nbsp;${sym}&nbsp;${bH}&nbsp;＝&nbsp;<span class="answer-shown">${p.answer}</span></span>
       </div>`;
     }
+    // 通常問題（答え版なら赤字で答え表示）
+    const answerHTML = ANSWER_MODE
+      ? `<span class="answer-filled" style="min-width:${cfg.answerWidth||'56px'};display:inline-block;text-align:left">${p.answer}</span>`
+      : `<span class="answer-blank" style="width:${cfg.answerWidth||'56px'}"></span>`;
     return `<div class="problem-cell">
       <span class="problem-num">(${i+1})</span>
-      <span class="problem-expr">${p.a}&nbsp;${sym}&nbsp;${p.b}&nbsp;＝&nbsp;<span class="answer-blank" style="width:${cfg.answerWidth||'56px'}"></span></span>
+      <span class="problem-expr">${p.a}&nbsp;${sym}&nbsp;${p.b}&nbsp;＝&nbsp;${answerHTML}</span>
     </div>`;
   }).join('');
   return `<div class="problems-grid" style="${style}">${cells}</div>`;
@@ -175,11 +196,15 @@ function buildWrittenGrid(problems, cfg) {
         <div class="written-answer-space written-answer-shown">${p.answer}</div>
       </div>`;
     }
+    // 通常筆算（答え版なら答えを赤字で表示）
+    const answerHTML = ANSWER_MODE
+      ? `<div class="written-answer-space written-answer-shown answer-filled">${p.answer}</div>`
+      : `<div class="written-answer-space"></div>`;
     return `<div class="written-cell">
       <span class="written-problem-num">(${i+1})</span>
       <div class="written-a">${p.a}</div>
       <div class="written-op-row"><span class="written-symbol">${sym}</span><span class="written-b">${p.b}</span></div>
-      <div class="written-answer-space"></div>
+      ${answerHTML}
     </div>`;
   }).join('');
   return `<div class="written-grid" style="${style}">${cells}</div>`;
