@@ -1,0 +1,29 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.16/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.16",
+  "version": "1.1.0",
+  "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "packageName": "com.example.mathgenerator",
+  "developer": {
+    "name": "算数問題ジェネレーター",
+    "websiteUrl": "https://YOUR_USERNAME.github.io/YOUR_REPO",
+    "privacyUrl": "https://YOUR_USERNAME.github.io/YOUR_REPO",
+    "termsOfUseUrl": "https://YOUR_USERNAME.github.io/YOUR_REPO"
+  },
+  "icons": { "color": "color.png", "outline": "outline.png" },
+  "name": { "short": "算数ジェネレーター", "full": "算数問題ジェネレーター" },
+  "description": {
+    "short": "小学生向け算数問題を自動生成",
+    "full": "学年別・形式別・傾向別に算数問題を自動生成して印刷できるアプリです。"
+  },
+  "accentColor": "#ff6b35",
+  "staticTabs": [{
+    "entityId": "mathgenerator-main",
+    "name": "問題を作る",
+    "contentUrl": "https://YOUR_USERNAME.github.io/YOUR_REPO/index.html",
+    "websiteUrl": "https://YOUR_USERNAME.github.io/YOUR_REPO/index.html",
+    "scopes": ["personal"]
+  }],
+  "permissions": ["identity", "messageTeamMembers"],
+  "validDomains": ["YOUR_USERNAME.github.io"]
+}

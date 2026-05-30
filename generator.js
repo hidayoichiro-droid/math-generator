@@ -17,7 +17,6 @@ function randomByDigits(digits) {
   return Math.floor(Math.random()*9)+1;
 }
 
-// 配列をシャッフル
 function shuffle(arr) {
   for (let i=arr.length-1; i>0; i--) {
     const j = Math.floor(Math.random()*(i+1));
@@ -26,30 +25,20 @@ function shuffle(arr) {
   return arr;
 }
 
-/**
- * 難易度に応じて a・b の隠す桁インデックスを決定する
- * level: 'easy'(1桁) | 'normal'(2桁) | 'hard'(3桁以上)
- * 返り値: { aHidden: number[], bHidden: number[] }
- */
 function calcHiddenDigits(a, b, level) {
   const aStr = String(a), bStr = String(b);
-  const totalDigits = aStr.length + bStr.length;
-
-  // 隠す桁数
-  let numToHide;
-  if (level === 'easy')   numToHide = 1;
-  else if (level === 'normal') numToHide = Math.min(2, totalDigits);
-  else /* hard */         numToHide = Math.min(Math.max(3, aStr.length + bStr.length), totalDigits);
-
-  // 全桁の位置リスト [{num:'a',pos:0}, ...]
-  const allPos = [];
-  for (let i=0; i<aStr.length; i++) allPos.push({num:'a', pos:i});
-  for (let i=0; i<bStr.length; i++) allPos.push({num:'b', pos:i});
-
-  const selected = shuffle([...allPos]).slice(0, numToHide);
+  const total = aStr.length + bStr.length;
+  let n;
+  if (level === 'easy')   n = 1;
+  else if (level === 'normal') n = Math.min(2, total);
+  else                    n = Math.min(Math.max(3, aStr.length + bStr.length), total);
+  const all = [];
+  for (let i=0; i<aStr.length; i++) all.push({num:'a', pos:i});
+  for (let i=0; i<bStr.length; i++) all.push({num:'b', pos:i});
+  const sel = shuffle([...all]).slice(0, n);
   return {
-    aHidden: selected.filter(p=>p.num==='a').map(p=>p.pos).sort(),
-    bHidden: selected.filter(p=>p.num==='b').map(p=>p.pos).sort()
+    aHidden: sel.filter(p=>p.num==='a').map(p=>p.pos).sort(),
+    bHidden: sel.filter(p=>p.num==='b').map(p=>p.pos).sort()
   };
 }
 
@@ -63,10 +52,8 @@ function generateProblem(operation, digits, writtenOps, mushikuiLevel) {
   } else {
     actualOp = operation;
   }
-
   switch (actualOp) {
-    case 'addition':
-      a=randomByDigits(digits); b=randomByDigits(digits); answer=a+b; break;
+    case 'addition': a=randomByDigits(digits); b=randomByDigits(digits); answer=a+b; break;
     case 'subtraction':
       a=randomByDigits(digits); b=randomByDigits(digits);
       if(a<b)[a,b]=[b,a]; if(a===b)b=Math.max(1,b-1);
@@ -77,40 +64,30 @@ function generateProblem(operation, digits, writtenOps, mushikuiLevel) {
       answer=a*b; break;
     case 'division':
       b=randomByDigits(1); const q=randomByDigits(digits); a=b*q; answer=q; break;
-    default:
-      a=randomByDigits(digits); b=randomByDigits(digits); answer=a+b; actualOp='addition';
+    default: a=randomByDigits(digits); b=randomByDigits(digits); answer=a+b; actualOp='addition';
   }
-
-  // 虫食い桁計算
   const isMushikui = mushikuiLevel && mushikuiLevel !== 'off';
-  const hiddenDigits = isMushikui ? calcHiddenDigits(a, b, mushikuiLevel) : { aHidden:[], bHidden:[] };
-
+  const hidden = isMushikui ? calcHiddenDigits(a, b, mushikuiLevel) : { aHidden:[], bHidden:[] };
   return {
     a, b, answer,
     operation: actualOp, isWritten,
     symbol: OPERATION_SYMBOLS[actualOp],
     mushikuiLevel: mushikuiLevel || 'off',
-    aHidden: hiddenDigits.aHidden,
-    bHidden: hiddenDigits.bHidden
+    aHidden: hidden.aHidden, bHidden: hidden.bHidden
   };
 }
 
-function generateDaionProblems(daionConfig) {
-  const { operation, digits, count, writtenOps, mushikuiLevel } = daionConfig;
-  return Array.from({length:count}, () =>
-    generateProblem(operation, digits, writtenOps, mushikuiLevel || 'off'));
+function generateDaionProblems(c) {
+  return Array.from({length: c.count}, () =>
+    generateProblem(c.operation, c.digits, c.writtenOps, c.mushikuiLevel || 'off'));
 }
 
 function generateAllProblems(daionList) {
-  return daionList.map((daion, index) => ({
-    index: index+1,
-    label: OPERATION_LABELS[daion.operation],
-    operation: daion.operation,
-    mushikuiLevel: daion.mushikuiLevel || 'off',
-    problems: generateDaionProblems(daion)
+  return daionList.map((d, i) => ({
+    index: i+1, label: OPERATION_LABELS[d.operation],
+    operation: d.operation, mushikuiLevel: d.mushikuiLevel || 'off',
+    problems: generateDaionProblems(d)
   }));
 }
 
-if (typeof module !== 'undefined') {
-  module.exports = { generateAllProblems, generateProblem, OPERATION_LABELS, OPERATION_SYMBOLS };
-}
+if (typeof module !== 'undefined') module.exports = { generateAllProblems, generateProblem };

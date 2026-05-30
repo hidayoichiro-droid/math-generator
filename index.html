@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="算数ジェネレーター">
   <meta name="theme-color" content="#ff6b35">
   <title>算数問題ジェネレーター</title>
   <link rel="manifest" href="manifest.webmanifest">
@@ -23,9 +21,17 @@
     </div>
   </header>
 
+  <!-- タブ -->
+  <nav class="tabs-bar">
+    <button class="tab-btn active" data-tab="grade">🎯 学年別</button>
+    <button class="tab-btn" data-tab="format">📋 形式別</button>
+    <button class="tab-btn" data-tab="tendency">🎨 傾向別</button>
+    <button class="tab-btn" data-tab="custom">⚙️ カスタム</button>
+  </nav>
+
   <main class="main-content">
 
-    <!-- ── ヘッダー設定 ── -->
+    <!-- 共通: ヘッダー設定 -->
     <section class="card">
       <h2 class="card-title">📅 問題用紙のヘッダー</h2>
       <div class="form-grid">
@@ -52,16 +58,48 @@
       </div>
     </section>
 
-    <!-- ── 大問設定 ── -->
-    <section class="card">
-      <div class="card-header-row">
-        <h2 class="card-title">✏️ 大問の設定</h2>
-        <button class="btn-add" id="btn-add-daion">＋ 追加</button>
+    <!-- 🎯 学年別タブ -->
+    <section class="tab-pane active" id="pane-grade">
+      <div class="card">
+        <h2 class="card-title">🎯 学年で選ぶ</h2>
+        <div class="grade-cards" id="grade-cards"></div>
+        <div class="topics-area" id="topics-area" hidden>
+          <h3 class="topics-title" id="topics-title"></h3>
+          <div class="topics-list" id="topics-list"></div>
+        </div>
       </div>
-      <div id="daion-list"></div>
     </section>
 
-    <!-- ── プリセット ── -->
+    <!-- 📋 形式別タブ (placeholder) -->
+    <section class="tab-pane" id="pane-format" hidden>
+      <div class="card coming-soon-card">
+        <div class="coming-icon">📋</div>
+        <h2 class="coming-title">出題形式別</h2>
+        <p class="coming-desc">基本計算・虫食い・筆算特訓・ミックス・スピードテストなど<br>近日公開予定</p>
+      </div>
+    </section>
+
+    <!-- 🎨 傾向別タブ (placeholder) -->
+    <section class="tab-pane" id="pane-tendency" hidden>
+      <div class="card coming-soon-card">
+        <div class="coming-icon">🎨</div>
+        <h2 class="coming-title">出題傾向別</h2>
+        <p class="coming-desc">苦手克服・総復習・挑戦問題・毎日5分など<br>近日公開予定</p>
+      </div>
+    </section>
+
+    <!-- ⚙️ カスタムタブ -->
+    <section class="tab-pane" id="pane-custom" hidden>
+      <div class="card">
+        <div class="card-header-row">
+          <h2 class="card-title">✏️ 大問の設定</h2>
+          <button class="btn-add" id="btn-add-daion">＋ 追加</button>
+        </div>
+        <div id="daion-list"></div>
+      </div>
+    </section>
+
+    <!-- 共通: プリセット -->
     <section class="card">
       <h2 class="card-title">💾 プリセット</h2>
       <div id="preset-list"></div>
@@ -69,7 +107,6 @@
 
   </main>
 
-  <!-- ── アクションボタン ── -->
   <footer class="action-footer">
     <button class="btn-action btn-create" id="btn-create">⚡ 作成</button>
     <button class="btn-action btn-print"  id="btn-print"  disabled>🖨️ 印刷</button>
@@ -80,15 +117,11 @@
 
   <script src="generator.js"></script>
   <script src="storage.js"></script>
+  <script src="templates.js"></script>
   <script src="app.js"></script>
-
   <script>
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then(r => console.log('SW registered:', r.scope))
-          .catch(e => console.log('SW error:', e));
-      });
+      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
     }
   </script>
 </body>

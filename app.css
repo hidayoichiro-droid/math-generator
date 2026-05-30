@@ -22,14 +22,48 @@ body {
 /* ── Header ── */
 .app-header {
   display: flex; align-items: center; gap: 12px;
-  padding: 14px 16px;
+  padding: 12px 16px;
   background: var(--accent); color: white;
-  position: sticky; top: 0; z-index: 50;
+  position: sticky; top: 0; z-index: 60;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
-.app-logo { font-size: 30px; }
-.app-title { font-size: 17px; font-weight: 800; }
-.app-sub   { font-size: 12px; opacity: 0.85; }
+.app-logo { font-size: 28px; }
+.app-title { font-size: 16px; font-weight: 800; }
+.app-sub { font-size: 11px; opacity: 0.85; }
+
+/* ── Tabs ── */
+.tabs-bar {
+  display: flex;
+  background: var(--surface);
+  border-bottom: 2px solid var(--border);
+  position: sticky;
+  top: 56px;
+  z-index: 50;
+  overflow-x: auto;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  -webkit-overflow-scrolling: touch;
+}
+.tab-btn {
+  flex: 1;
+  min-width: max-content;
+  padding: 11px 12px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.tab-btn:hover { background: rgba(255,107,53,0.05); }
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
 
 /* ── Main ── */
 .main-content { padding: 12px; display: flex; flex-direction: column; gap: 12px; max-width: 600px; margin: 0 auto; }
@@ -39,6 +73,82 @@ body {
 .card-title { font-size: 14px; font-weight: 800; margin-bottom: 10px; }
 .card-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .card-header-row .card-title { margin-bottom: 0; }
+
+/* ── Tab Panes ── */
+.tab-pane[hidden] { display: none; }
+
+/* ── 学年カード ── */
+.grade-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.grade-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 6px;
+  border: 2px solid var(--border);
+  border-radius: var(--rs);
+  background: white;
+  font-family: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.15s;
+}
+.grade-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+.grade-card.selected {
+  border-color: var(--accent);
+  background: #fff7f5;
+  box-shadow: 0 0 0 3px rgba(255,107,53,0.15);
+}
+.grade-icon { font-size: 28px; line-height: 1; }
+.grade-name { font-size: 13px; font-weight: 800; color: var(--text); }
+
+/* ── トピック一覧 ── */
+.topics-area {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1.5px dashed var(--border);
+}
+.topics-title {
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: var(--accent);
+}
+.topics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.topic-card {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 11px 13px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--rs);
+  background: white;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.15s;
+}
+.topic-card:hover { border-color: var(--accent); background: #fff7f5; }
+.topic-name { font-size: 14px; font-weight: 800; color: var(--text); }
+.topic-desc { font-size: 12px; color: var(--muted); }
+
+/* ── Coming Soon ── */
+.coming-soon-card {
+  text-align: center;
+  padding: 36px 20px;
+}
+.coming-icon { font-size: 48px; margin-bottom: 12px; }
+.coming-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; color: var(--accent); }
+.coming-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
 
 /* ── Forms ── */
 .form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
@@ -76,7 +186,6 @@ label { font-size: 11px; font-weight: 700; color: var(--muted); }
   background: none; border: none; color: #ccc; cursor: pointer;
   font-size: 18px; padding: 2px 6px; border-radius: 6px;
   -webkit-tap-highlight-color: transparent;
-  transition: color 0.15s;
 }
 .btn-remove:active { color: #ef4444; }
 .daion-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: end; margin-bottom: 8px; }
@@ -97,6 +206,13 @@ label { font-size: 11px; font-weight: 700; color: var(--muted); }
 }
 .check-pill input { display: none; }
 .check-pill:has(input:checked) { background: var(--accent); border-color: var(--accent); color: white; }
+
+/* 虫食い難易度ピル（:has()不使用） */
+.mushikui-level-pill input { display: none; }
+.mushikui-level-pill.active-off    { background:#6b7280; border-color:#6b7280; color:white; }
+.mushikui-level-pill.active-easy   { background:#16a34a; border-color:#16a34a; color:white; }
+.mushikui-level-pill.active-normal { background:#d97706; border-color:#d97706; color:white; }
+.mushikui-level-pill.active-hard   { background:#dc2626; border-color:#dc2626; color:white; }
 
 /* ── 追加ボタン ── */
 .btn-add {
@@ -141,6 +257,7 @@ label { font-size: 11px; font-weight: 700; color: var(--muted); }
   background: var(--surface); border-top: 1.5px solid var(--border);
   box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
   padding-bottom: calc(10px + env(safe-area-inset-bottom));
+  z-index: 40;
 }
 .btn-action {
   flex: 1; padding: 13px 6px;
@@ -173,15 +290,6 @@ label { font-size: 11px; font-weight: 700; color: var(--muted); }
   .form-grid { grid-template-columns: 80px 80px 100px 1fr; }
   .form-group.span2 { grid-column: auto; }
   .btn-action { font-size: 16px; }
+  .grade-cards { grid-template-columns: repeat(6, 1fr); }
+  .tab-btn { font-size: 14px; }
 }
-
-
-
-/* ─── 虫食い難易度ピル（:has()不使用・全ブラウザ対応） ─── */
-.mushikui-level-pill input { display: none; }
-
-/* active クラスを JS で付与してスタイルを変える */
-.mushikui-level-pill.active-off    { background:#6b7280; border-color:#6b7280; color:white; }
-.mushikui-level-pill.active-easy   { background:#16a34a; border-color:#16a34a; color:white; }
-.mushikui-level-pill.active-normal { background:#d97706; border-color:#d97706; color:white; }
-.mushikui-level-pill.active-hard   { background:#dc2626; border-color:#dc2626; color:white; }

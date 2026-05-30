@@ -4,7 +4,6 @@ const OP_CLASS = {addition:'op-addition',subtraction:'op-subtraction',multiplica
 const OP_LABELS_WS = {addition:'たしざん',subtraction:'ひきざん',multiplication:'かけざん',division:'わりざん',written:'ひっさん'};
 const OP_SYMBOLS_WS = {addition:'＋',subtraction:'－',multiplication:'×',division:'÷',written:'＋'};
 const CIRCLES = ['①','②','③','④','⑤','⑥','⑦','⑧'];
-
 const MUSHIKUI_BADGES = {
   easy:   { label:'虫食い（優）', color:'#16a34a' },
   normal: { label:'虫食い（普）', color:'#d97706' },
@@ -18,9 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const raw = localStorage.getItem('math_gen_worksheet');
     if (raw) { worksheetData = JSON.parse(raw); render(worksheetData); }
     else showError('問題データがありません。設定画面から「作成」を押してください。');
-  } catch(e) { showError('データ読み込み失敗'); }
+  } catch (e) { showError('データ読み込み失敗'); }
 
-  document.getElementById('btn-print').addEventListener('click', ()=>window.print());
+  document.getElementById('btn-print').addEventListener('click', () => window.print());
   document.getElementById('btn-save').addEventListener('click', saveAsHTML);
   document.getElementById('btn-regen').addEventListener('click', () => {
     if (!worksheetData?.settings) return;
@@ -28,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('math_gen_worksheet', JSON.stringify(worksheetData));
     render(worksheetData);
   });
-  document.getElementById('btn-back').addEventListener('click', ()=>history.back());
+  document.getElementById('btn-back').addEventListener('click', () => history.back());
   if (new URLSearchParams(location.search).get('save')==='1') setTimeout(saveAsHTML, 800);
 });
 
@@ -40,11 +39,9 @@ function render(data) {
   fitA4();
 }
 
-// スマホ画面幅にA4プレビューをフィット（印刷には影響しない）
 function fitA4() {
   const page = document.getElementById('a4-page');
   if (!page) return;
-  // 一旦リセットして自然幅を取得
   page.style.zoom = '';
   const naturalW = page.offsetWidth || 794;
   const vw = window.innerWidth || document.documentElement.clientWidth;
@@ -92,9 +89,6 @@ function getGridConfig(count, maxDigit, isWritten) {
   return {cols, fontSize, answerWidth};
 }
 
-/**
- * 数値をHTML文字列に変換。hiddenPos の桁を空ボックスに置き換える
- */
 function numHTML(num, hiddenPos) {
   const str = String(num);
   if (!hiddenPos || hiddenPos.length === 0) return str;
@@ -114,33 +108,23 @@ function buildDaionSection(daion, idx) {
   const badge    = lvl && lvl!=='off' && MUSHIKUI_BADGES[lvl]
     ? `<span class="mushikui-badge" style="background:${MUSHIKUI_BADGES[lvl].color}">🐛 ${MUSHIKUI_BADGES[lvl].label}</span>`
     : '';
-
-  const html = isWritten
-    ? buildWrittenGrid(daion.problems, cfg)
-    : buildNormalGrid(daion.problems, cfg);
-
+  const html = isWritten ? buildWrittenGrid(daion.problems, cfg) : buildNormalGrid(daion.problems, cfg);
   return `<div class="daion-section ${opClass}">
-    <div class="daion-heading">
-      <div class="daion-num-circle">${circNum}</div>
-      <div class="daion-title-text">${label}</div>
-      ${badge}
-    </div>
-    ${html}
-  </div>`;
+    <div class="daion-heading"><div class="daion-num-circle">${circNum}</div><div class="daion-title-text">${label}</div>${badge}</div>
+    ${html}</div>`;
 }
 
 function buildNormalGrid(problems, cfg) {
   const style = `grid-template-columns:repeat(${cfg.cols},1fr);font-size:${cfg.fontSize};`;
   const cells = problems.map((p, i) => {
     const sym = OP_SYMBOLS_WS[p.operation]||'＋';
-    const isMushikui = p.mushikuiLevel && p.mushikuiLevel !== 'off';
-
-    if (isMushikui) {
-      const aHTML = numHTML(p.a, p.aHidden);
-      const bHTML = numHTML(p.b, p.bHidden);
+    const isMu = p.mushikuiLevel && p.mushikuiLevel !== 'off';
+    if (isMu) {
+      const aH = numHTML(p.a, p.aHidden);
+      const bH = numHTML(p.b, p.bHidden);
       return `<div class="problem-cell">
         <span class="problem-num">(${i+1})</span>
-        <span class="problem-expr">${aHTML}&nbsp;${sym}&nbsp;${bHTML}&nbsp;＝&nbsp;<span class="answer-shown">${p.answer}</span></span>
+        <span class="problem-expr">${aH}&nbsp;${sym}&nbsp;${bH}&nbsp;＝&nbsp;<span class="answer-shown">${p.answer}</span></span>
       </div>`;
     }
     return `<div class="problem-cell">
@@ -155,28 +139,21 @@ function buildWrittenGrid(problems, cfg) {
   const style = `grid-template-columns:repeat(${cfg.cols},1fr);font-size:${cfg.fontSize};`;
   const cells = problems.map((p, i) => {
     const sym = OP_SYMBOLS_WS[p.operation]||'＋';
-    const isMushikui = p.mushikuiLevel && p.mushikuiLevel !== 'off';
-
-    if (isMushikui) {
-      const aHTML = numHTML(p.a, p.aHidden);
-      const bHTML = numHTML(p.b, p.bHidden);
+    const isMu = p.mushikuiLevel && p.mushikuiLevel !== 'off';
+    if (isMu) {
+      const aH = numHTML(p.a, p.aHidden);
+      const bH = numHTML(p.b, p.bHidden);
       return `<div class="written-cell">
         <span class="written-problem-num">(${i+1})</span>
-        <div class="written-a">${aHTML}</div>
-        <div class="written-op-row">
-          <span class="written-symbol">${sym}</span>
-          <span class="written-b">${bHTML}</span>
-        </div>
+        <div class="written-a">${aH}</div>
+        <div class="written-op-row"><span class="written-symbol">${sym}</span><span class="written-b">${bH}</span></div>
         <div class="written-answer-space written-answer-shown">${p.answer}</div>
       </div>`;
     }
     return `<div class="written-cell">
       <span class="written-problem-num">(${i+1})</span>
       <div class="written-a">${p.a}</div>
-      <div class="written-op-row">
-        <span class="written-symbol">${sym}</span>
-        <span class="written-b">${p.b}</span>
-      </div>
+      <div class="written-op-row"><span class="written-symbol">${sym}</span><span class="written-b">${p.b}</span></div>
       <div class="written-answer-space"></div>
     </div>`;
   }).join('');
@@ -184,22 +161,22 @@ function buildWrittenGrid(problems, cfg) {
 }
 
 function showError(msg) {
-  document.getElementById('a4-page').innerHTML=`<div style="padding:40px;text-align:center;color:#999;font-size:16px;">${msg}</div>`;
+  document.getElementById('a4-page').innerHTML = `<div style="padding:40px;text-align:center;color:#999;font-size:16px;">${msg}</div>`;
 }
 
 function saveAsHTML() {
   let css='';
   try{Array.from(document.styleSheets).forEach(s=>{try{Array.from(s.cssRules||[]).forEach(r=>{css+=r.cssText+'\n';});}catch(e){}});}catch(e){}
-  const title=buildTitle(worksheetData.settings);
-  const html=`<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><title>${title}</title>
+  const title = buildTitle(worksheetData.settings);
+  const html = `<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><title>${title}</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
 <style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}body{font-family:'Noto Sans JP',sans-serif;background:#fff}${css}
 .a4-page{width:210mm;min-height:297mm;padding:13mm;margin:0 auto;background:#fff}
 @media print{@page{size:A4 portrait;margin:13mm}}</style></head>
 <body>${document.getElementById('print-page').innerHTML}</body></html>`;
-  const a=Object.assign(document.createElement('a'),{
-    href:URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'})),
-    download:`${title.replace(/\s/g,'_')}.html`
+  const a = Object.assign(document.createElement('a'), {
+    href: URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'})),
+    download: `${title.replace(/\s/g,'_')}.html`
   });
-  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
 }
