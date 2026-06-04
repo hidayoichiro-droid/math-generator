@@ -90,29 +90,27 @@ function getGridConfig(count, maxDigit, isWritten) {
     if (count<=9) return {cols:3,     fontSize:'17pt'};
     return               {cols:3,     fontSize:'14pt'};
   }
-  // 通常問題: 桁数に応じて列数を決定（4桁以上は2列）
+  // 通常問題: 3桁以上は強制的に2列、1〜2桁のみ3列
   let cols;
   if (count <= 2) cols = count;
-  else if (maxDigit >= 4) cols = 2;
+  else if (maxDigit >= 3) cols = 2;
   else cols = 3;
 
-  // フォントサイズと答え欄幅（桁数で固定値を採用）
   let fontSize, answerWidth;
   if (maxDigit >= 4) {
-    // 4桁以上: 2列レイアウト
-    if      (count <= 4)  fontSize = '18pt';
-    else if (count <= 8)  fontSize = '16pt';
-    else if (count <= 12) fontSize = '14pt';
-    else                  fontSize = '12pt';
-    answerWidth = '95px';   // 4桁書ける幅
+    // 4桁: 2列レイアウト
+    if      (count <= 4)  fontSize = '20pt';
+    else if (count <= 8)  fontSize = '17pt';
+    else if (count <= 12) fontSize = '15pt';
+    else                  fontSize = '13pt';
+    answerWidth = '110px';
   } else if (maxDigit === 3) {
-    // 3桁: 3列レイアウト
-    if      (count <= 3)  fontSize = '19pt';
-    else if (count <= 6)  fontSize = '16pt';
-    else if (count <= 9)  fontSize = '14pt';
-    else if (count <= 15) fontSize = '12pt';
-    else                  fontSize = '11pt';
-    answerWidth = '75px';   // 3桁書ける幅
+    // 3桁: 2列レイアウト（スペース余裕あり）
+    if      (count <= 4)  fontSize = '21pt';
+    else if (count <= 8)  fontSize = '19pt';
+    else if (count <= 12) fontSize = '17pt';
+    else                  fontSize = '15pt';
+    answerWidth = '95px';
   } else {
     // 1〜2桁: 3列レイアウト
     if      (count <= 3)  fontSize = '21pt';
