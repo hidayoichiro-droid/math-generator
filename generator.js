@@ -27,18 +27,37 @@ function shuffle(arr) {
 
 function calcHiddenDigits(a, b, level) {
   const aStr = String(a), bStr = String(b);
-  const total = aStr.length + bStr.length;
+  const aLen = aStr.length, bLen = bStr.length;
+  const total = aLen + bLen;
+
   let n;
   if (level === 'easy')   n = 1;
   else if (level === 'normal') n = Math.min(2, total);
-  else                    n = Math.min(Math.max(3, aStr.length + bStr.length), total);
+  else /* hard */ {
+    // 全体の約50%を隠す。最低2桁、最大は total-2（最低2桁は見せる）
+    n = Math.max(2, Math.min(Math.ceil(total * 0.5), Math.max(2, total - 2)));
+  }
+  n = Math.min(n, total);
+
+  // 各数値で最低1桁は見せる（2桁以上の数のみ）
+  const maxAHidden = aLen >= 2 ? aLen - 1 : aLen;
+  const maxBHidden = bLen >= 2 ? bLen - 1 : bLen;
+
+  // 全位置をシャッフルして、制限を満たすように選ぶ
   const all = [];
-  for (let i=0; i<aStr.length; i++) all.push({num:'a', pos:i});
-  for (let i=0; i<bStr.length; i++) all.push({num:'b', pos:i});
-  const sel = shuffle([...all]).slice(0, n);
+  for (let i=0; i<aLen; i++) all.push({num:'a', pos:i});
+  for (let i=0; i<bLen; i++) all.push({num:'b', pos:i});
+  shuffle(all);
+
+  const aHidden = [], bHidden = [];
+  for (const item of all) {
+    if (aHidden.length + bHidden.length >= n) break;
+    if (item.num === 'a' && aHidden.length < maxAHidden) aHidden.push(item.pos);
+    else if (item.num === 'b' && bHidden.length < maxBHidden) bHidden.push(item.pos);
+  }
   return {
-    aHidden: sel.filter(p=>p.num==='a').map(p=>p.pos).sort(),
-    bHidden: sel.filter(p=>p.num==='b').map(p=>p.pos).sort()
+    aHidden: aHidden.sort((x,y)=>x-y),
+    bHidden: bHidden.sort((x,y)=>x-y)
   };
 }
 
