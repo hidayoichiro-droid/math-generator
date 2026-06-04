@@ -1,5 +1,5 @@
 // sw.js — v6 ネットワーク優先
-const CACHE = 'math-gen-v10';
+const CACHE = 'math-gen-v11';
 const ASSETS = [
   './', './index.html', './worksheet.html',
   './app.css', './app.js', './generator.js', './storage.js', './templates.js',

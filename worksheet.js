@@ -141,7 +141,11 @@ function buildDaionSection(daion, idx) {
   const opClass  = OP_CLASS[daion.operation]||'op-addition';
   const label    = OP_LABELS_WS[daion.operation]||daion.operation;
   const circNum  = CIRCLES[idx]||`(${idx+1})`;
-  const maxDigit = Array.isArray(daion.digits)?Math.max(...daion.digits):(daion.digits||2);
+  // 実際の問題から最大桁数を算出（わり算で被除数が大きくなる場合に対応）
+  let maxDigit = 1;
+  daion.problems.forEach(p => {
+    maxDigit = Math.max(maxDigit, String(p.a).length, String(p.b).length, String(p.answer).length);
+  });
   const isWritten= daion.operation==='written';
   const cfg      = getGridConfig(daion.problems.length, maxDigit, isWritten);
   const lvl      = daion.mushikuiLevel;
